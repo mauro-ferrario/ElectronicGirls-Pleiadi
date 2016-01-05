@@ -49,11 +49,12 @@ private:
   ofParameterGroup*     getStars1ParameterGroup();
   ofParameterGroup*     stars1Params;
   ofParameter<float>    blur1;
-  ofParameter<float>    stepSize1;
+  ofParameter<bool>     drawStars1;
   
   ofParameterGroup*     getStars2ParameterGroup();
   ofParameterGroup*     stars2Params;
   ofParameter<float>    blur2;
+  ofParameter<bool>     drawStars2;
   
   vector<ofVec3f>       stars1;
   vector<ofVec3f>       stars2;
@@ -69,6 +70,7 @@ private:
   ofParameterGroup*     colorSkyParams;
   ofParameter<bool>     useDynamicColorSky;
   ofParameter<ofColor>  colorSky;
+  ofParameter<bool>     drawSky;
   ofImage               colorSkyImage;
   
   ofxPanel              gui;

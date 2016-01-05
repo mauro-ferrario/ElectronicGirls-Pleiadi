@@ -22,9 +22,9 @@ void EGPleiadi::setup()
   noisePercent = 60;
   setupFBOs();
   setupGUI();
-  colorSkyImage.load("testSky.jpg");
-  overlay.load("overlay.png");
-  colorDodge.load("colorDodge");
+  colorSkyImage.load("images/testSky.jpg");
+  overlay.load("images/overlay.png");
+  colorDodge.load("shaders/colorDodge");
   noise.initPerlinImage(size.x/noisePercent, size.y/noisePercent, 1024, 768);
   setupStars();
   angle = 0;
@@ -49,8 +49,8 @@ void EGPleiadi::setupStars()
     ofDrawCircle(stars2[a].x, stars2[a].y, stars2[a].z);
   starFbo2.end();
   
-  goofyBlurStar1.setup(size.x, size.y);
-  goofyBlurStar2.setup(size.x, size.y);
+  goofyBlurStar1.setup(size.x, size.y, "shaders/");
+  goofyBlurStar2.setup(size.x, size.y, "shaders/");
 }
 
 void EGPleiadi::toggleGUI()
@@ -92,12 +92,15 @@ void EGPleiadi::setupSingleFbo(ofFbo& fbo)
 void EGPleiadi::update()
 {
   angle += rotationSpeed;
-  updateStars1();
-  updateStars2();
-  goofyBlurStar1.update(starFbo1, ofVec2f(blur1));
-  goofyBlurStar2.update(starFbo2, ofVec2f(blur2));
-  noise.update();
-  updateColorSky();
+  if(drawStars1)
+    updateStars1();
+  if(drawStars2)
+    updateStars2();
+  if(drawSky)
+  {
+    noise.update();
+    updateColorSky();
+  }
 }
 
 void EGPleiadi::updateStars1()
@@ -124,6 +127,7 @@ void EGPleiadi::updateStars1()
     ofDrawCircle(stars1[a].x, stars1[a].y, stars1[a].z* ofNoise(sin(float(a*.13/.84))*a*.0001) *2);
   endRotationScaleMatrix();
   starFbo1.end();
+  goofyBlurStar1.update(starFbo1, ofVec2f(blur1));
 }
 
 void EGPleiadi::updateStars2()
@@ -135,6 +139,7 @@ void EGPleiadi::updateStars2()
     ofDrawCircle(stars2[a].x, stars2[a].y, stars2[a].z * ofNoise(sin(ofGetFrameNum())*.005*a/100) *1.2);
   endRotationScaleMatrix();
   starFbo2.end();
+  goofyBlurStar2.update(starFbo2, ofVec2f(blur2));
 }
 
 void EGPleiadi::startRotationScaleMatrix()
@@ -180,17 +185,22 @@ void EGPleiadi::updateColorSky()
 void EGPleiadi::draw()
 {
   ofSetColor(255);
-  startRotationScaleMatrix();
-  colorDodge.begin();
-  colorDodge.setUniform1f("noisePercent", noisePercent);
-  colorDodge.setUniformTexture("blur", noise.perlinImg.getTexture(), 1);
-  colorDodge.setUniformTexture("colorSky", colorSkyFbo.getTexture(), 2);
-  noise.draw(0, 0, size.x, size.y);
-  colorSkyFbo.draw(0,0);
-  colorDodge.end();
-  endRotationScaleMatrix();
-  goofyBlurStar1.draw();
-  goofyBlurStar2.draw();
+  if(drawSky)
+  {
+    startRotationScaleMatrix();
+    colorDodge.begin();
+    colorDodge.setUniform1f("noisePercent", noisePercent);
+    colorDodge.setUniformTexture("blur", noise.perlinImg.getTexture(), 1);
+    colorDodge.setUniformTexture("colorSky", colorSkyFbo.getTexture(), 2);
+    noise.draw(0, 0, size.x, size.y);
+    colorSkyFbo.draw(0,0);
+    colorDodge.end();
+    endRotationScaleMatrix();
+  }
+  if(drawStars1)
+    goofyBlurStar1.draw();
+  if(drawStars2)
+    goofyBlurStar2.draw();
   drawDebug();
 }
 
@@ -212,8 +222,8 @@ ofParameterGroup* EGPleiadi::getStars1ParameterGroup()
   if(stars1Params->getName() == "")
   {
     stars1Params->setName("Stars 1");
+    stars1Params->add(drawStars1.set("Draw star", true));
     stars1Params->add(blur1.set("Blur", 0, 0, 5));
-    stars1Params->add(stepSize1.set("Step", 0, 0, 50));
   }
   return stars1Params;
 }
@@ -227,6 +237,7 @@ ofParameterGroup* EGPleiadi::getStars2ParameterGroup()
   if(stars2Params->getName() == "")
   {
     stars2Params->setName("Stars 2");
+    stars1Params->add(drawStars2.set("Draw star", true));
     stars2Params->add(blur2.set("Blur", 0, 0, 5));
   }
   return stars2Params;
@@ -256,6 +267,7 @@ ofParameterGroup* EGPleiadi::getColorSkyParameterGroup()
   if(colorSkyParams->getName() == "")
   {
     colorSkyParams->setName("Color Sky");
+    colorSkyParams->add(drawSky.set("Draw Sky", true));
     colorSkyParams->add(useDynamicColorSky.set("Use dynamic", false));
     colorSkyParams->add(colorSky.set("Color sky", ofColor(255,255), ofColor(0,0), ofColor(255,255)));
   }
