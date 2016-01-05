@@ -13,6 +13,7 @@
 #include "ofxGUI.h"
 #include "GoofyPerlinNoise.h"
 #include "GoofyBlurGLSL.h"
+#include "BillboardLayer.h"
 
 #define TOT_STARS_1 1500
 #define TOT_STARS_2 500
@@ -24,6 +25,7 @@ public:
   void                  setup();
   void                  update();
   void                  draw();
+  void                  toggleDebug();
   void                  toggleGUI();
   void                  savePreset();
   void                  saveDebugImages();
@@ -43,6 +45,9 @@ private:
   ofFbo                 starFbo2;
   ofShader              colorDodge;
   
+  BillboardLayer        billboardLayer1;
+  BillboardLayer        billboardLayer2;
+  
   GoofyBlurGLSL         goofyBlurStar1;
   GoofyBlurGLSL         goofyBlurStar2;
   
@@ -50,11 +55,13 @@ private:
   ofParameterGroup*     stars1Params;
   ofParameter<float>    blur1;
   ofParameter<bool>     drawStars1;
+  ofParameter<bool>     useBillboard1;
   
   ofParameterGroup*     getStars2ParameterGroup();
   ofParameterGroup*     stars2Params;
   ofParameter<float>    blur2;
   ofParameter<bool>     drawStars2;
+  ofParameter<bool>     useBillboard2;
   
   vector<ofVec3f>       stars1;
   vector<ofVec3f>       stars2;
@@ -75,6 +82,7 @@ private:
   
   ofxPanel              gui;
   bool                  guiVisible;
+  bool                  debugVisible;
   
   ofParameter<float>    rotationSpeed;
   ofParameter<float>    trail;

@@ -21,13 +21,13 @@ void EGPleiadi::setup()
   size.y = 1200;
   noisePercent = 60;
   setupFBOs();
-  setupGUI();
   colorSkyImage.load("images/testSky.jpg");
   overlay.load("images/overlay.png");
   colorDodge.load("shaders/colorDodge");
   noise.initPerlinImage(size.x/noisePercent, size.y/noisePercent, 1024, 768);
   setupStars();
   angle = 0;
+  setupGUI();
 }
 
 void EGPleiadi::setupStars()
@@ -51,11 +51,20 @@ void EGPleiadi::setupStars()
   
   goofyBlurStar1.setup(size.x, size.y, "shaders/");
   goofyBlurStar2.setup(size.x, size.y, "shaders/");
+  
+  billboardLayer1.setup(2000, "images/spark.png", ofVec3f(size));
+  billboardLayer2.setup(500, "images/spark.png", ofVec3f(size));
 }
 
 void EGPleiadi::toggleGUI()
 {
-  guiVisible = !guiVisible;
+  if(debugVisible)
+    guiVisible = !guiVisible;
+}
+
+void EGPleiadi::toggleDebug()
+{
+  debugVisible = !debugVisible;
 }
 
 void EGPleiadi::setupGUI()
@@ -69,6 +78,8 @@ void EGPleiadi::setupGUI()
   gui.add(*getNoiseParameterGroup());
   gui.add(*getStars1ParameterGroup());
   gui.add(*getStars2ParameterGroup());
+  gui.add(*billboardLayer1.getBillboardParams());
+  gui.add(*billboardLayer2.getBillboardParams());
   guiVisible = true;
   gui.loadFromFile("preset.xml");
   trailValue = 255;
@@ -120,11 +131,19 @@ void EGPleiadi::updateStars1()
   }
   
   startRotationScaleMatrix();
-  ofColor c = colorSky;
-  c.a = 255;
-  ofSetColor(c);
-  for(int a = 0; a < TOT_STARS_1; a++)
-    ofDrawCircle(stars1[a].x, stars1[a].y, stars1[a].z* ofNoise(sin(float(a*.13/.84))*a*.0001) *2);
+  if(useBillboard1)
+  {
+    billboardLayer1.update();
+    billboardLayer1.draw();
+  }
+  else
+  {
+    ofColor c = colorSky;
+    c.a = 255;
+    ofSetColor(c);
+    for(int a = 0; a < TOT_STARS_1; a++)
+      ofDrawCircle(stars1[a].x, stars1[a].y, stars1[a].z* ofNoise(sin(float(a*.13/.84))*a*.0001) *2);
+  }
   endRotationScaleMatrix();
   starFbo1.end();
   goofyBlurStar1.update(starFbo1, ofVec2f(blur1));
@@ -135,8 +154,16 @@ void EGPleiadi::updateStars2()
   starFbo2.begin();
   ofClear(0,0);
   startRotationScaleMatrix();
-  for(int a = 0; a < TOT_STARS_2; a++)
-    ofDrawCircle(stars2[a].x, stars2[a].y, stars2[a].z * ofNoise(sin(ofGetFrameNum())*.005*a/100) *1.2);
+  if(useBillboard2)
+  {
+    billboardLayer2.update();
+    billboardLayer2.draw();
+  }
+  else
+  {
+    for(int a = 0; a < TOT_STARS_2; a++)
+      ofDrawCircle(stars2[a].x, stars2[a].y, stars2[a].z * ofNoise(sin(ofGetFrameNum())*.005*a/100) *1.2);
+  }
   endRotationScaleMatrix();
   starFbo2.end();
   goofyBlurStar2.update(starFbo2, ofVec2f(blur2));
@@ -201,7 +228,9 @@ void EGPleiadi::draw()
     goofyBlurStar1.draw();
   if(drawStars2)
     goofyBlurStar2.draw();
-  drawDebug();
+//  billboardLayer1.draw();
+  if(debugVisible)
+    drawDebug();
 }
 
 void EGPleiadi::drawDebug()
@@ -222,6 +251,7 @@ ofParameterGroup* EGPleiadi::getStars1ParameterGroup()
   if(stars1Params->getName() == "")
   {
     stars1Params->setName("Stars 1");
+    stars1Params->add(useBillboard1.set("Use billboard", false));
     stars1Params->add(drawStars1.set("Draw star", true));
     stars1Params->add(blur1.set("Blur", 0, 0, 5));
   }
@@ -237,7 +267,8 @@ ofParameterGroup* EGPleiadi::getStars2ParameterGroup()
   if(stars2Params->getName() == "")
   {
     stars2Params->setName("Stars 2");
-    stars1Params->add(drawStars2.set("Draw star", true));
+    stars2Params->add(useBillboard2.set("Use billboard", false));
+    stars2Params->add(drawStars2.set("Draw star", true));
     stars2Params->add(blur2.set("Blur", 0, 0, 5));
   }
   return stars2Params;

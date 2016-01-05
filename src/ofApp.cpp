@@ -21,6 +21,8 @@ void ofApp::draw(){
 void ofApp::keyPressed(int key){
   if(key == 'g')
     pleiadi.toggleGUI();
+  if(key == 'd')
+    pleiadi.toggleDebug();
   if(key == 's')
   {
     pleiadi.savePreset();
