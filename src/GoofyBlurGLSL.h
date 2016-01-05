@@ -17,7 +17,7 @@
 class GoofyBlurGLSL
 {  
 public:
-  void              setup(int width, int height);
+  void              setup(int width, int height, string shaderFolder = "");
   void              update(ofFbo &fbo, ofVec2f blur);
   void              draw();
   void              draw(int x, int y);

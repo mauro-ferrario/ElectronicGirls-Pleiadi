@@ -10,9 +10,9 @@
 
 
 
-void GoofyBlurGLSL::setup(int width, int height)
+void GoofyBlurGLSL::setup(int width, int height, string shaderFolder)
 {
-  blurShader.load("blurShader.vert","blurShader.frag");
+  blurShader.load(shaderFolder+"blurShader.vert",shaderFolder+"blurShader.frag");
   blurPingPong.allocate(width, height, GL_RGBA32F_ARB);
   blurPingPong.clear();
   dimension.x = width;
