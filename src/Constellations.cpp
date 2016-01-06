@@ -17,7 +17,16 @@ void Constellations::drawBillboard()
 {
   BillboardLayer::drawBillboard();
   for(int a = 0; a < totConstellations; a++)
+  {
+    int totPointConstellation = constellations[a].getVertices().size();
+    for(int i = 0; i < totPointConstellation; i++)
+    {
+      constellations[a].setNormal(i, ofVec3f(billboardsScale*1.5,0,0));
+    }
+    ofPushMatrix();
     constellations[a].draw();
+    ofPopMatrix();
+  }
 }
 
 void Constellations::addConstellation(int totPoints, ofVec3f points[])
