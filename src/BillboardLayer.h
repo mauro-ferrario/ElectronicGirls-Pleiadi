@@ -15,14 +15,16 @@
 class BillboardLayer
 {
 public:
+                    BillboardLayer(){};
   void              setup(int totBillboards, string textureName, ofVec3f spaceSize);
   void              setup(int totBillboards, string textureName, ofVec3f spaceSize, vector<ofVec3f> positions);
   void              update();
   void              draw();
   void              setupTexture(string textureName);
   ofParameterGroup* getBillboardParams();
+protected:
+  virtual void      drawBillboard();
 private:
-  void              drawBillboard();
   void              setupBillboards();
   int               totBillboards;
   vector<float>     billboardSizeTarget;

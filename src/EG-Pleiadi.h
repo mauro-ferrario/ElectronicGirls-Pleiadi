@@ -14,9 +14,10 @@
 #include "GoofyPerlinNoise.h"
 #include "GoofyBlurGLSL.h"
 #include "BillboardLayer.h"
+#include "Constellations.h"
 
 #define TOT_STARS_1 2000
-#define TOT_STARS_2 500
+#define TOT_STARS_2 1
 
 class EGPleiadi
 {
@@ -40,13 +41,14 @@ private:
   void                  updateStars1();
   void                  updateStars2();
   void                  drawDebug();
+  void                  setupConstellations();
   ofVec2f               size;
   ofFbo                 starFbo1;
   ofFbo                 starFbo2;
   ofShader              colorDodge;
   
   BillboardLayer        billboardLayer1;
-  BillboardLayer        billboardLayer2;
+  Constellations        billboardLayer2;
   
   GoofyBlurGLSL         goofyBlurStar1;
   GoofyBlurGLSL         goofyBlurStar2;
@@ -84,6 +86,7 @@ private:
   bool                  guiVisible;
   bool                  debugVisible;
   
+  ofParameter<bool>     rotationAndScaleEnabled;
   ofParameter<float>    rotationSpeed;
   ofParameter<float>    trail;
   ofParameter<bool>     trailActive;

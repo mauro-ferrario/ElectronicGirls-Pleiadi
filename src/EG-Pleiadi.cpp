@@ -11,7 +11,6 @@
 
 EGPleiadi::EGPleiadi()
 {
-  setup();
 }
 
 void EGPleiadi::setup()
@@ -54,6 +53,20 @@ void EGPleiadi::setupStars()
   
   billboardLayer1.setup(TOT_STARS_1, "images/spark.png", ofVec3f(size), stars1);
   billboardLayer2.setup(TOT_STARS_2, "images/spark.png", ofVec3f(size), stars2);
+  setupConstellations();
+}
+
+void EGPleiadi::setupConstellations()
+{
+  ofVec3f points[8] = {ofVec3f(0.212682534059,0.165844116733),ofVec3f(-0.151225644534,-1.24125740984),ofVec3f(-0.923444346926,-2.75865844384),ofVec3f(-2.48177255799,-3.68137916359),ofVec3f(-2.23468735011,-4.65936971596), ofVec3f(-4.19248307019, -5.02881264515), ofVec3f(-4.21528032896, -3.88656892472), ofVec3f(-2.48177255799,-3.68137916359)};
+ 
+  for(int a = 0; a < 8; a++)
+  {
+    points[a] *= ofVec3f(100,100,1);
+    points[a] += ofVec3f(1920*.5, 1080*.5);
+  }
+  
+  billboardLayer2.addConstellation(8, points);
 }
 
 void EGPleiadi::toggleGUI()
@@ -70,6 +83,7 @@ void EGPleiadi::toggleDebug()
 void EGPleiadi::setupGUI()
 {
   gui.setup();
+  gui.add(rotationAndScaleEnabled.set("Apply rotation and scale", false));
   gui.add(scale.set("Scale", 1.5, 0,2));
   gui.add(rotationSpeed.set("Rotation", .5, 0,1));
   gui.add(trail.set("Trail", .5, 0,2));
@@ -171,8 +185,11 @@ void EGPleiadi::startRotationScaleMatrix()
 {
   ofPushMatrix();
   ofTranslate(size.x*.5, size.y*.5);
-  ofScale(scale, scale);
-  ofRotate(angle);
+  if(rotationAndScaleEnabled)
+  {
+    ofScale(scale, scale);
+    ofRotate(angle);
+  }
   ofTranslate(-size.x*.5, -size.y*.5);
 }
 
