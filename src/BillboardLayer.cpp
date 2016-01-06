@@ -17,6 +17,13 @@ void BillboardLayer::setup(int totBillboards, string textureName, ofVec3f spaceS
   setupTexture(textureName);
 }
 
+void BillboardLayer::setup(int totBillboards, string textureName, ofVec3f spaceSize, vector<ofVec3f> positions)
+{
+  setup(totBillboards, textureName, spaceSize);
+  for(int a = 0; a < totBillboards; a++)
+    billboards.getVertices()[a].set(positions[a]);
+}
+
 void BillboardLayer::setupBillboards()
 {
   billboards.getVertices().resize(totBillboards);

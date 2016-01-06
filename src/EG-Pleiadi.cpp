@@ -52,8 +52,8 @@ void EGPleiadi::setupStars()
   goofyBlurStar1.setup(size.x, size.y, "shaders/");
   goofyBlurStar2.setup(size.x, size.y, "shaders/");
   
-  billboardLayer1.setup(2000, "images/spark.png", ofVec3f(size));
-  billboardLayer2.setup(500, "images/spark.png", ofVec3f(size));
+  billboardLayer1.setup(TOT_STARS_1, "images/spark.png", ofVec3f(size), stars1);
+  billboardLayer2.setup(TOT_STARS_2, "images/spark.png", ofVec3f(size), stars2);
 }
 
 void EGPleiadi::toggleGUI()

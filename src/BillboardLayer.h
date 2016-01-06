@@ -16,6 +16,7 @@ class BillboardLayer
 {
 public:
   void              setup(int totBillboards, string textureName, ofVec3f spaceSize);
+  void              setup(int totBillboards, string textureName, ofVec3f spaceSize, vector<ofVec3f> positions);
   void              update();
   void              draw();
   void              setupTexture(string textureName);
