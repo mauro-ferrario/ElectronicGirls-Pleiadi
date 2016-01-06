@@ -21,6 +21,7 @@ public:
   void              setupTexture(string textureName);
   ofParameterGroup* getBillboardParams();
 private:
+  void              drawBillboard();
   void              setupBillboards();
   int               totBillboards;
   vector<float>     billboardSizeTarget;

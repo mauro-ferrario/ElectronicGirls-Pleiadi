@@ -61,7 +61,7 @@ void BillboardLayer::draw()
   texture.getTexture().bind();
   ofPushMatrix();
   ofTranslate(0, 0, posZ);
-  billboards.draw();
+  drawBillboard();
   ofPopMatrix();
   texture.getTexture().unbind();
   ofDisablePointSprites(); // not needed for GL3/4
@@ -69,6 +69,11 @@ void BillboardLayer::draw()
     ofDisableBlendMode();
   if(useShader)
     billboardShader.end();
+}
+
+void BillboardLayer::drawBillboard()
+{
+  billboards.draw();
 }
 
 ofParameterGroup* BillboardLayer::getBillboardParams()
