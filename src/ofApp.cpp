@@ -2,6 +2,10 @@
 
 //--------------------------------------------------------------
 void ofApp::setup(){
+  int bufferSize = 256;
+  soundStream.setInput(this);
+  soundStream.stop();
+  soundStream.setup(this, 0, 2, 44100, bufferSize, 4);
   ofBackground(0);
   ofSetWindowPosition(-2000, 0);
   ofToggleFullscreen();
@@ -65,6 +69,22 @@ void ofApp::mouseExited(int x, int y){
 
 }
 
+void ofApp::exit()
+{
+  //------------------------
+  // try to close FMOD:
+  ofFmodSoundPlayer::closeFmod();
+  //------------------------
+  
+  //------------------------
+  // try to close rtAudio:
+  
+  ofSoundStreamStop();
+  
+  ofSoundStreamClose();
+  int bufferSize = 256;
+}
+
 //--------------------------------------------------------------
 void ofApp::windowResized(int w, int h){
 
@@ -78,4 +98,10 @@ void ofApp::gotMessage(ofMessage msg){
 //--------------------------------------------------------------
 void ofApp::dragEvent(ofDragInfo dragInfo){ 
 
+}
+
+void ofApp::audioIn(float * input, int bufferSize, int nChannels)
+{
+  if(input)
+    pleiadi.audioIn(input, bufferSize, nChannels);
 }
