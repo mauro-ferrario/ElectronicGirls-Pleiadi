@@ -15,30 +15,32 @@
 class BillboardLayer
 {
 public:
-                    BillboardLayer(){};
-  void              setup(int totBillboards, string textureName, ofVec3f spaceSize);
-  void              setup(int totBillboards, string textureName, ofVec3f spaceSize, vector<ofVec3f> positions);
-  void              update();
-  void              draw();
-  void              setupTexture(string textureName);
-  ofParameterGroup* getBillboardParams();
+                      BillboardLayer(){};
+  void                setup(int totBillboards, string textureName, ofVec3f spaceSize);
+  virtual void        setup(int totBillboards, string textureName, ofVec3f spaceSize, vector<ofVec3f> positions);
+  void                update();
+  void                draw();
+  void                setupTexture(string textureName);
+  ofParameterGroup*   getBillboardParams();
+
 protected:
-  virtual void      drawBillboard();
+  virtual void        drawBillboard();
+  ofParameter<float>  billboardsScale;
+  int                 totBillboards;
+  void                setupBillboards();
+  ofVec3f             spaceSize;
+
 private:
-  void              setupBillboards();
-  int               totBillboards;
-  vector<float>     billboardSizeTarget;
-  vector<ofColor>   billboardColor;
-  ofShader          billboardShader;
-  ofImage           texture;
-  ofVboMesh         billboards;
-  ofVec3f           spaceSize;
+  vector<float>       billboardSizeTarget;
+  vector<ofColor>     billboardColor;
+  ofShader            billboardShader;
+  ofImage             texture;
+  ofVboMesh           billboards;
   
   
   ofParameterGroup*   billboardParams;
   ofParameter<bool>   useShader;
   ofParameter<bool>   useAddBlendMode;
-  ofParameter<float>  billboardsScale;
   ofParameter<float>  posZ;
   ofEasyCam           cam;
 };
