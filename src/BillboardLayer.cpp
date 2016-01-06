@@ -61,6 +61,24 @@ void BillboardLayer::update()
   }
 }
 
+void BillboardLayer::update(vector<float> left, vector<float> right)
+{
+  for (int i=0; i<totBillboards; i++)
+  {
+    if(i < totBillboards*.5)
+    {
+      int index = ofMap(i, 0, totBillboards*.5, 0, left.size()-1);
+      billboardSizeTarget[i] = billboardsScale * 10 * abs(left[index]);
+    }
+    else
+    {
+      int index = ofMap(i, totBillboards*.5, totBillboards-1, 0, right.size()-1);
+      billboardSizeTarget[i] = billboardsScale * 10 * abs(right[index]);
+    }
+    billboards.setNormal(i,ofVec3f(billboardSizeTarget[i],0,0));
+  }
+}
+
 void BillboardLayer::draw()
 {
   if(useShader)
