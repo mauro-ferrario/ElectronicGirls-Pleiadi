@@ -58,15 +58,79 @@ void EGPleiadi::setupStars()
 
 void EGPleiadi::setupConstellations()
 {
-  ofVec3f points[8] = {ofVec3f(0.212682534059,0.165844116733),ofVec3f(-0.151225644534,-1.24125740984),ofVec3f(-0.923444346926,-2.75865844384),ofVec3f(-2.48177255799,-3.68137916359),ofVec3f(-2.23468735011,-4.65936971596), ofVec3f(-4.19248307019, -5.02881264515), ofVec3f(-4.21528032896, -3.88656892472), ofVec3f(-2.48177255799,-3.68137916359)};
- 
-  for(int a = 0; a < 8; a++)
+  ofXml xml;
+  xml.load("constellations.xml");
+  int totConstellations =  xml.getNumChildren();
+  for(int a = 0; a < totConstellations; a++)
   {
-    points[a] *= ofVec3f(100,100,1);
-    points[a] += ofVec3f(1920*.5, 1080*.5);
+    xml.setTo("constellation["+ofToString(a)+"]");
+    vector<ofVec3f> points;
+    int totLines = xml.getNumChildren("line");
+    if(xml.getValue("name") == "UMi")
+    {
+      ofVec2f max = ofVec2f(66600000);
+      ofVec2f min = ofVec2f(-66600000);
+      cout << xml.getValue("name") << " - Lines = "  << totLines << endl;
+      for(int i = 0; i < totLines; i++)
+      {
+        xml.setTo("line["+ofToString(i)+"]");
+        
+        xml.setTo("point[0]");
+        ofVec3f tempPoint;
+        tempPoint.x = ofToFloat(xml.getValue("x")) * 100;
+        tempPoint.y = ofToFloat(xml.getValue("y")) * 100;
+
+        tempPoint.x += 1920*.5;
+        tempPoint.y += 1080*.5;
+        
+        bool found = false;
+        for(int z = 0; z < points.size(); z++)
+        {
+          if(points[z] == tempPoint)
+          {
+            found = true;
+            z = points.size();
+          }
+        }
+        if(!found)
+          points.push_back(tempPoint);
+        
+        xml.setToParent();
+        
+        xml.setTo("point[1]");
+        tempPoint.x = ofToFloat(xml.getValue("x")) * 100;
+        tempPoint.y = ofToFloat(xml.getValue("y")) * 100;
+        tempPoint.x += 1920*.5;
+        tempPoint.y += 1080*.5;
+        found = false;
+        for(int z = 0; z < points.size(); z++)
+        {
+          if(points[z] == tempPoint)
+          {
+            found = true;
+            z = points.size();
+          }
+        }
+        if(!found)
+          points.push_back(tempPoint);
+        xml.setToParent();
+        
+        if(tempPoint.x < min.x)
+          min.x = tempPoint.x;
+        if(tempPoint.y < min.y)
+          min.y = tempPoint.y;
+        
+        if(tempPoint.x > max.x)
+          max.x = tempPoint.x;
+        if(tempPoint.y > max.y)
+          max.y = tempPoint.y;
+        
+        xml.setToParent();
+      }
+      billboardLayer2.addConstellation(points);
+    }
+    xml.setToParent();
   }
-  
-  billboardLayer2.addConstellation(8, points);
 }
 
 void EGPleiadi::toggleGUI()
@@ -243,7 +307,6 @@ void EGPleiadi::draw()
     goofyBlurStar1.draw();
   if(drawStars2)
     goofyBlurStar2.draw();
-//  billboardLayer1.draw();
   if(debugVisible)
     drawDebug();
 }
