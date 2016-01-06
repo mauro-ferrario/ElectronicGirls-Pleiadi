@@ -8,6 +8,11 @@
 
 #include "Constellations.h"
 
+void Constellations::setup(int totBillboards, string textureName, ofVec3f spaceSize, vector<ofVec3f> positions)
+{
+  BillboardLayer::setup(totBillboards, textureName, spaceSize, positions);
+}
+
 Constellations::Constellations()
 {
   totConstellations = 0;
