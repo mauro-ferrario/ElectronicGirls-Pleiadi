@@ -15,7 +15,8 @@ class Constellations : public BillboardLayer
 {
 public:
                             Constellations();
-  void                      addConstellation(int totPoints, ofVec3f points[]);
+  void                      setup(int totBillboards, string textureName, ofVec3f spaceSize, vector<ofVec3f> positions);
+  void                      addConstellation(vector<ofVec3f> points);
 protected:
   void                      drawBillboard();
 private:
