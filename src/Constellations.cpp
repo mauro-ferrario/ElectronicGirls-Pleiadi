@@ -34,8 +34,9 @@ void Constellations::drawBillboard()
   }
 }
 
-void Constellations::addConstellation(int totPoints, ofVec3f points[])
+void Constellations::addConstellation(vector<ofVec3f> points)
 {
+  int totPoints = points.size();
   ofVboMesh tempMesh;
   tempMesh.getVertices().resize(totPoints);
   tempMesh.getColors().resize(totPoints);
