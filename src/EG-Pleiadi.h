@@ -15,7 +15,7 @@
 #include "GoofyBlurGLSL.h"
 #include "BillboardLayer.h"
 
-#define TOT_STARS_1 1500
+#define TOT_STARS_1 2000
 #define TOT_STARS_2 500
 
 class EGPleiadi
