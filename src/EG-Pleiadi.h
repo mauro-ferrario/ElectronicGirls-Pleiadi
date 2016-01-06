@@ -17,7 +17,7 @@
 #include "Constellations.h"
 
 #define TOT_STARS_1 2000
-#define TOT_STARS_2 0
+#define TOT_STARS_2 500
 
 class EGPleiadi
 {
@@ -30,6 +30,7 @@ public:
   void                  toggleGUI();
   void                  savePreset();
   void                  saveDebugImages();
+  void                  audioIn(float * input, int bufferSize, int nChannels);
 private:
   void                  setupFBOs();
   void                  setupGUI();
@@ -79,6 +80,8 @@ private:
   ofParameterGroup*     colorSkyParams;
   ofParameter<bool>     useDynamicColorSky;
   ofParameter<ofColor>  colorSky;
+  ofParameter<float>    backgroundMultiplier;
+  ofParameter<float>    backgroundFadeOutSpeed;
   ofParameter<bool>     drawSky;
   ofImage               colorSkyImage;
   
@@ -95,6 +98,17 @@ private:
   
   ofImage               overlay;
   float                 angle;
+  
+  vector<float>         left;
+  vector<float>         right;
+  vector<float>         volHistory;
+		
+  int                   bufferCounter;
+  int                   drawCounter;
+		
+  float                 smoothedVol;
+  float                 scaledVol;
+
 };
 
 #endif /* defined(__ElectronicGirls_Pleiadi__EG_Pleiadi__) */
