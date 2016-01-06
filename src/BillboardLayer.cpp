@@ -33,7 +33,10 @@ void BillboardLayer::setupBillboards()
   for(int a = 0; a < totBillboards; a++)
   {
     billboardSizeTarget.push_back(1);
-    billboardColor.push_back(ofColor(255));
+    if(a%10==0)
+      billboardColor.push_back(ofColor(ofRandom(200,255),ofRandom(200,255),0));
+    else
+      billboardColor.push_back(ofColor(255));
     billboards.getColors()[a].set(billboardColor[a]);
     billboards.getVertices()[a].set(ofRandom(0, spaceSize.x), ofRandom(0, spaceSize.y), 0);
   }
