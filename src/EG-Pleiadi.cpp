@@ -78,8 +78,6 @@ void EGPleiadi::setupGUI()
   gui.add(*getNoiseParameterGroup());
   gui.add(*getStars1ParameterGroup());
   gui.add(*getStars2ParameterGroup());
-  gui.add(*billboardLayer1.getBillboardParams());
-  gui.add(*billboardLayer2.getBillboardParams());
   guiVisible = true;
   gui.loadFromFile("preset.xml");
   trailValue = 255;
@@ -254,6 +252,10 @@ ofParameterGroup* EGPleiadi::getStars1ParameterGroup()
     stars1Params->add(useBillboard1.set("Use billboard", false));
     stars1Params->add(drawStars1.set("Draw star", true));
     stars1Params->add(blur1.set("Blur", 0, 0, 5));
+    ofParameterGroup* billboard1 = billboardLayer1.getBillboardParams();
+    billboard1->setName("Billboard 1");
+    stars1Params->add(*billboardLayer1.getBillboardParams());
+    billboard1 = NULL;
   }
   return stars1Params;
 }
@@ -270,6 +272,10 @@ ofParameterGroup* EGPleiadi::getStars2ParameterGroup()
     stars2Params->add(useBillboard2.set("Use billboard", false));
     stars2Params->add(drawStars2.set("Draw star", true));
     stars2Params->add(blur2.set("Blur", 0, 0, 5));
+    ofParameterGroup* billboard2 = billboardLayer2.getBillboardParams();
+    billboard2->setName("Billboard 2");
+    stars2Params->add(*billboardLayer2.getBillboardParams());
+    billboard2 = NULL;
   }
   return stars2Params;
 }
