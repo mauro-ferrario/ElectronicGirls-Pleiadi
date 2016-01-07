@@ -3,15 +3,10 @@
 //--------------------------------------------------------------
 void ofApp::setup(){
   int bufferSize = 256;
-  //------------------------
-  // try to close FMOD:
-  ofFmodSoundPlayer::closeFmod();
-  //------------------------
-  //------------------------
-  // try to close rtAudio:
-  ofSoundStreamStop();
-  ofSoundStreamClose();
-  ofSoundStreamSetup(0, 1, this, 44100, bufferSize, 4);
+//  ofFmodSoundPlayer::closeFmod();
+//  ofSoundStreamStop();
+//  ofSoundStreamClose();
+//  ofSoundStreamSetup(0, 1, this, 44100, bufferSize, 4);
   soundStream.setup(this, 0, 2, 44100, bufferSize, 4);
   ofBackground(0);
   ofSetWindowPosition(-2000, 0);
