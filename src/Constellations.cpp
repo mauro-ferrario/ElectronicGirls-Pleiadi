@@ -44,7 +44,7 @@ void Constellations::addConstellation(vector<ofVec3f> points)
   
   for(int a = 0; a < totPoints; a++)
   {
-    tempMesh.getColors()[a].set(ofColor(255));
+    tempMesh.getColors()[a].set(ofColor(ofRandom(200,255), ofRandom(200,255)));
     tempMesh.getVertices()[a].set(points[a]);
     tempMesh.setNormal(a,ofVec3f(500,0,0));
   }
