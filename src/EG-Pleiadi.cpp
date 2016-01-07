@@ -164,10 +164,10 @@ void EGPleiadi::setupGUI()
   gui.add(rotationAndScaleEnabled.set("Apply rotation and scale", false));
   gui.add(scale.set("Scale", 1.5, 0,2));
   gui.add(rotationSpeed.set("Rotation", .5, 0,1));
-  gui.add(drawTrailFbo.set("Draw trail", true));
+//  gui.add(drawTrailFbo.set("Draw trail", true));
   gui.add(trailFboOpacity.set("Trail FBO opacity", 100,0,255));
   gui.add(trail.set("Trail", .5, 0,255));
-  gui.add(trailActive.set("Trail active", false));
+//  gui.add(trailActive.set("Trail active", false));
   gui.add(*getColorSkyParameterGroup());
   gui.add(*getNoiseParameterGroup());
   gui.add(*getStars1ParameterGroup());
@@ -220,6 +220,9 @@ void EGPleiadi::update()
 
 void EGPleiadi::audioIn(float * input, int bufferSize, int nChannels)
 {
+  if(left.size() == 0 || right.size() == 0)
+    return;
+  
   float curVol = 0.0;
   
   // samples are "interleaved"
@@ -250,8 +253,13 @@ void EGPleiadi::audioIn(float * input, int bufferSize, int nChannels)
 
 void EGPleiadi::updateStars1()
 {
+  if(trailFboOpacity == 0)
+    drawTrailFbo = false;
+  else
+    drawTrailFbo = true;
+  
   trailFBO.begin();
-  if(trailActive)
+  if(drawTrailFbo)
   {
     trailValue = trail;
     ofSetColor(0,trailValue);
@@ -266,11 +274,11 @@ void EGPleiadi::updateStars1()
   }
   //  ofClear(0,0);
   //  ofClear(0,0);
-  startRotationScaleMatrix();
+//  startRotationScaleMatrix();
   ofSetColor(255);
   billboardLayer1.update(left, right);
   billboardLayer1.draw(false);
-  endRotationScaleMatrix();
+//  endRotationScaleMatrix();
   trailFBO.end();
   
   starFbo1.begin();
@@ -363,6 +371,7 @@ void EGPleiadi::updateColorSky()
     colorSky2.set(c);
     ofSetColor(colorSky2);
     colorSkyImage2.draw(0,0,size.x, size.y);
+    // Sembra che iltrail prenda anche il noise
     if(drawTrailFbo)
     {
       ofSetColor(255,trailFboOpacity);
