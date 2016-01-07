@@ -79,12 +79,12 @@ void BillboardLayer::update(vector<float> left, vector<float> right)
   }
 }
 
-void BillboardLayer::draw()
+void BillboardLayer::draw(bool deactiveBlendMode)
 {
-  if(useShader)
+  if(useShader&&!deactiveBlendMode)
     billboardShader.begin();
-  if(useAddBlendMode)
-    ofEnableBlendMode(OF_BLENDMODE_ADD);
+  if(useAddBlendMode&&!deactiveBlendMode)
+      ofEnableBlendMode(OF_BLENDMODE_ADD);
   ofEnablePointSprites(); // not needed for GL3/4
   texture.getTexture().bind();
   ofPushMatrix();
@@ -93,9 +93,9 @@ void BillboardLayer::draw()
   ofPopMatrix();
   texture.getTexture().unbind();
   ofDisablePointSprites(); // not needed for GL3/4
-  if(useAddBlendMode)
+  if(useAddBlendMode&&!deactiveBlendMode)
     ofDisableBlendMode();
-  if(useShader)
+  if(useShader&&!deactiveBlendMode)
     billboardShader.end();
 }
 

@@ -164,7 +164,9 @@ void EGPleiadi::setupGUI()
   gui.add(rotationAndScaleEnabled.set("Apply rotation and scale", false));
   gui.add(scale.set("Scale", 1.5, 0,2));
   gui.add(rotationSpeed.set("Rotation", .5, 0,1));
-  gui.add(trail.set("Trail", .5, 0,100));
+  gui.add(drawTrailFbo.set("Draw trail", true));
+  gui.add(trailFboOpacity.set("Trail FBO opacity", 100,0,255));
+  gui.add(trail.set("Trail", .5, 0,255));
   gui.add(trailActive.set("Trail active", false));
   gui.add(*getColorSkyParameterGroup());
   gui.add(*getNoiseParameterGroup());
@@ -180,6 +182,7 @@ void EGPleiadi::setupFBOs()
   setupSingleFbo(starFbo1);
   setupSingleFbo(starFbo2);
   setupSingleFbo(colorSkyFbo);
+  setupSingleFbo(trailFBO);
 }
 
 void EGPleiadi::setupSingleFbo(ofFbo& fbo)
@@ -247,12 +250,13 @@ void EGPleiadi::audioIn(float * input, int bufferSize, int nChannels)
 
 void EGPleiadi::updateStars1()
 {
-  starFbo1.begin();
+  trailFBO.begin();
   if(trailActive)
   {
     trailValue = trail;
     ofSetColor(0,trailValue);
     ofDrawRectangle(0, 0, size.x, size.y);
+//    ofClear(0,trailValue);
   }
   else
   {
@@ -260,11 +264,21 @@ void EGPleiadi::updateStars1()
     trailValue = ofClamp(trailValue, 0, 255);
     ofClear(0,255-trailValue);
   }
+  //  ofClear(0,0);
+  //  ofClear(0,0);
+  startRotationScaleMatrix();
+  ofSetColor(255);
+  billboardLayer1.update(left, right);
+  billboardLayer1.draw(false);
+  endRotationScaleMatrix();
+  trailFBO.end();
   
+  starFbo1.begin();
+  ofClear(0,0);
+  ofSetColor(255);
   startRotationScaleMatrix();
   if(useBillboard1)
   {
-    billboardLayer1.update(left, right);
     billboardLayer1.draw();
   }
   else
@@ -277,7 +291,9 @@ void EGPleiadi::updateStars1()
   }
   endRotationScaleMatrix();
   starFbo1.end();
-  goofyBlurStar1.update(starFbo1, ofVec2f(blur1));
+  
+  if(!drawTrailFbo)
+    goofyBlurStar1.update(starFbo1, ofVec2f(blur1));
 }
 
 void EGPleiadi::updateStars2()
@@ -347,6 +363,11 @@ void EGPleiadi::updateColorSky()
     colorSky2.set(c);
     ofSetColor(colorSky2);
     colorSkyImage2.draw(0,0,size.x, size.y);
+    if(drawTrailFbo)
+    {
+      ofSetColor(255,trailFboOpacity);
+      trailFBO.draw(0, 0, size.x, size.y);
+    }
   }
   colorSkyFbo.end();
 }
@@ -366,7 +387,7 @@ void EGPleiadi::draw()
     colorDodge.end();
     endRotationScaleMatrix();
   }
-  if(drawStars1)
+  if(drawStars1&&!drawTrailFbo)
     goofyBlurStar1.draw();
   if(drawStars2)
     goofyBlurStar2.draw();

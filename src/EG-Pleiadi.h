@@ -96,6 +96,8 @@ private:
   ofParameter<float>    trail;
   ofParameter<bool>     trailActive;
   ofParameter<float>    scale;
+  ofParameter<float>    trailFboOpacity;
+  ofParameter<bool>     drawTrailFbo;
   float                 trailValue;
   
   ofImage               overlay;
@@ -110,6 +112,9 @@ private:
 		
   float                 smoothedVol;
   float                 scaledVol;
+  
+  
+  ofFbo                 trailFBO;
 
 };
 

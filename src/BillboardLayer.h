@@ -20,7 +20,7 @@ public:
   virtual void        setup(int totBillboards, string textureName, ofVec3f spaceSize, vector<ofVec3f> positions);
   void                update();
   void                update(vector<float> left, vector<float> right);
-  void                draw();
+  void                draw(bool deactiveBlendMode = false);
   void                setupTexture(string textureName);
   ofParameterGroup*   getBillboardParams();
 
