@@ -17,7 +17,7 @@
 #include "Constellations.h"
 
 #define TOT_STARS_1 2000
-#define TOT_STARS_2 500
+#define TOT_STARS_2 100
 
 class EGPleiadi
 {
