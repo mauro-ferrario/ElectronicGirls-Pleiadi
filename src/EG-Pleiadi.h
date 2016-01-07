@@ -80,10 +80,12 @@ private:
   ofParameterGroup*     colorSkyParams;
   ofParameter<bool>     useDynamicColorSky;
   ofParameter<ofColor>  colorSky;
+  ofParameter<ofColor>  colorSky2;
   ofParameter<float>    backgroundMultiplier;
   ofParameter<float>    backgroundFadeOutSpeed;
   ofParameter<bool>     drawSky;
   ofImage               colorSkyImage;
+  ofImage               colorSkyImage2;
   
   ofxPanel              gui;
   bool                  guiVisible;

@@ -23,6 +23,7 @@ void EGPleiadi::setup()
   drawSky = true;
   useDynamicColorSky = false;
   colorSkyImage.load("images/testSky.jpg");
+  colorSkyImage2.load("images/testSky2.png");
   overlay.load("images/overlay.png");
   colorDodge.load("shaders/colorDodge");
   noise.initPerlinImage(size.x/noisePercent, size.y/noisePercent, 1024, 768);
@@ -163,7 +164,7 @@ void EGPleiadi::setupGUI()
   gui.add(rotationAndScaleEnabled.set("Apply rotation and scale", false));
   gui.add(scale.set("Scale", 1.5, 0,2));
   gui.add(rotationSpeed.set("Rotation", .5, 0,1));
-  gui.add(trail.set("Trail", .5, 0,2));
+  gui.add(trail.set("Trail", .5, 0,100));
   gui.add(trailActive.set("Trail active", false));
   gui.add(*getColorSkyParameterGroup());
   gui.add(*getNoiseParameterGroup());
@@ -216,8 +217,6 @@ void EGPleiadi::update()
 
 void EGPleiadi::audioIn(float * input, int bufferSize, int nChannels)
 {
-  if(!(input))
-    return;
   float curVol = 0.0;
   
   // samples are "interleaved"
@@ -343,6 +342,11 @@ void EGPleiadi::updateColorSky()
     colorSky.set(c);
     ofSetColor(colorSky);
     colorSkyImage.draw(0,0, size.x, size.y);
+    c = colorSky2;
+    c.a = smoothedVol * 40 * 255 * backgroundMultiplier;
+    colorSky2.set(c);
+    ofSetColor(colorSky2);
+    colorSkyImage2.draw(0,0,size.x, size.y);
   }
   colorSkyFbo.end();
 }
@@ -448,6 +452,7 @@ ofParameterGroup* EGPleiadi::getColorSkyParameterGroup()
     colorSkyParams->add(backgroundFadeOutSpeed.set("Background Fade out speed",1, 0, 1));
     colorSkyParams->add(backgroundMultiplier.set("Background Sky Multipluer",1, 0, 10));
     colorSkyParams->add(colorSky.set("Color sky", ofColor(255,255), ofColor(0,0), ofColor(255,255)));
+    colorSkyParams->add(colorSky2.set("Color sky 2", ofColor(255,255), ofColor(0,0), ofColor(255,255)));
   }
   return colorSkyParams;
 }
