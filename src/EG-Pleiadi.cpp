@@ -274,11 +274,10 @@ void EGPleiadi::updateStars1()
   }
   //  ofClear(0,0);
   //  ofClear(0,0);
-//  startRotationScaleMatrix();
+  startRotationScaleMatrix();
   ofSetColor(255);
-  billboardLayer1.update(left, right);
   billboardLayer1.draw(false);
-//  endRotationScaleMatrix();
+  endRotationScaleMatrix();
   trailFBO.end();
   
   starFbo1.begin();
@@ -287,6 +286,7 @@ void EGPleiadi::updateStars1()
   startRotationScaleMatrix();
   if(useBillboard1)
   {
+    billboardLayer1.update(left, right);
     billboardLayer1.draw();
   }
   else
