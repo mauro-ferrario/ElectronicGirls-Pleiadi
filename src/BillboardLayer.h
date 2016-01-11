@@ -23,10 +23,10 @@ public:
   void                draw(bool deactiveBlendMode = false);
   void                setupTexture(string textureName);
   ofParameterGroup*   getBillboardParams();
-
+  ofParameter<float>  billboardsScale;
+  
 protected:
   virtual void        drawBillboard();
-  ofParameter<float>  billboardsScale;
   int                 totBillboards;
   void                setupBillboards();
   ofVec3f             spaceSize;
@@ -43,7 +43,7 @@ private:
   ofParameter<bool>   useShader;
   ofParameter<bool>   useAddBlendMode;
   ofParameter<float>  posZ;
-  ofEasyCam           cam;
+  ofParameter<float>  maxScaleValue;
 };
 
 #endif /* defined(__ElectronicGirls_Pleiadi__BillboardLayer__) */
