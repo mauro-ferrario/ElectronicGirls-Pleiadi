@@ -15,9 +15,11 @@
 #include "GoofyBlurGLSL.h"
 #include "BillboardLayer.h"
 #include "Constellations.h"
+#include "GoofyOSCController.h"
 
-#define TOT_STARS_1 2000
-#define TOT_STARS_2 100
+
+#define TOT_STARS_1 1000
+#define TOT_STARS_2 1
 
 class EGPleiadi
 {
@@ -65,6 +67,8 @@ private:
   ofParameter<float>    blur2;
   ofParameter<bool>     drawStars2;
   ofParameter<bool>     useBillboard2;
+  ofParameter<float>    fakeStarsOpacity;
+  float                 fakeStarsOpacityOSC;
   
   vector<ofVec3f>       stars1;
   vector<ofVec3f>       stars2;
@@ -82,10 +86,14 @@ private:
   ofParameter<ofColor>  colorSky;
   ofParameter<ofColor>  colorSky2;
   ofParameter<float>    backgroundMultiplier;
+  float                 backgroundMultiplierOSC;
+  ofParameter<float>    backgroundMinimunOpacity;
+  float                 backgroundMinimunOpacityOSC;
   ofParameter<float>    backgroundFadeOutSpeed;
   ofParameter<bool>     drawSky;
   ofImage               colorSkyImage;
   ofImage               colorSkyImage2;
+  ofImage               fakeStars1;
   
   ofxPanel              gui;
   bool                  guiVisible;
@@ -93,12 +101,17 @@ private:
   
   ofParameter<bool>     rotationAndScaleEnabled;
   ofParameter<float>    rotationSpeed;
+  float                 rotationSpeedOSC;
   ofParameter<float>    trail;
+  float                 trailOSC;
   ofParameter<bool>     trailActive;
   ofParameter<float>    scale;
   ofParameter<float>    trailFboOpacity;
+  float                 trailFboOpacityOSC;
   ofParameter<bool>     drawTrailFbo;
   float                 trailValue;
+  float                 noiseSpeedOSC;
+  float                 billboardsScaleOSC;
   
   ofImage               overlay;
   float                 angle;
@@ -115,7 +128,6 @@ private:
   
   
   ofFbo                 trailFBO;
-
 };
 
 #endif /* defined(__ElectronicGirls_Pleiadi__EG_Pleiadi__) */

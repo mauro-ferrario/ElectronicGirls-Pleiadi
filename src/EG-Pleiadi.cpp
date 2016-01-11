@@ -9,6 +9,7 @@
 #include "EG-Pleiadi.h"
 
 
+
 EGPleiadi::EGPleiadi()
 {
 }
@@ -24,6 +25,7 @@ void EGPleiadi::setup()
   useDynamicColorSky = false;
   colorSkyImage.load("images/testSky.jpg");
   colorSkyImage2.load("images/testSky2.png");
+  fakeStars1.load("images/fakeStars1.png");
   overlay.load("images/overlay.png");
   colorDodge.load("shaders/colorDodge");
   noise.initPerlinImage(size.x/noisePercent, size.y/noisePercent, 1024, 768);
@@ -40,7 +42,16 @@ void EGPleiadi::setup()
   drawCounter		= 0;
   smoothedVol     = 0.0;
   scaledVol		= 0.0;
-
+  
+  GoofyOSCController::addMapValue("Rotation speed", rotationSpeedOSC, 1);
+  GoofyOSCController::addMapValue("Trail FBO opacity", trailFboOpacityOSC, 255);
+  GoofyOSCController::addMapValue("Trail opacity", trailOSC, 255);
+  GoofyOSCController::addMapValue("background Multipier", backgroundMultiplierOSC, 10);
+  GoofyOSCController::addMapValue("Background Minimun Opacity", backgroundMinimunOpacityOSC, 255);
+  GoofyOSCController::addMapValue("Fake stars opacity", fakeStarsOpacityOSC, 255);
+  GoofyOSCController::addMapValue("Noise Speed", noiseSpeedOSC, .1);
+  GoofyOSCController::addMapValue("Max stars scale", billboardsScaleOSC, 10000);
+  GoofyOSCController::getInstance().toggleDraw();
 }
 
 void EGPleiadi::setupStars()
@@ -156,6 +167,7 @@ void EGPleiadi::toggleGUI()
 void EGPleiadi::toggleDebug()
 {
   debugVisible = !debugVisible;
+  GoofyOSCController::getInstance().toggleDraw();
 }
 
 void EGPleiadi::setupGUI()
@@ -195,6 +207,14 @@ void EGPleiadi::setupSingleFbo(ofFbo& fbo)
 
 void EGPleiadi::update()
 {
+  rotationSpeed                   = rotationSpeedOSC;
+  trailFboOpacity                 = trailFboOpacityOSC;
+  trail                           = trailOSC;
+  backgroundMultiplier            = backgroundMultiplierOSC;
+  fakeStarsOpacity                = fakeStarsOpacityOSC;
+  backgroundMinimunOpacity        = backgroundMinimunOpacityOSC;
+  noise.speed                     = noiseSpeedOSC;
+  billboardLayer1.billboardsScale = billboardsScaleOSC;
   //lets scale the vol up to a 0-1 range
   scaledVol = ofMap(smoothedVol, 0.0, 0.17, 0.0, 1.0, true);
   
@@ -362,15 +382,21 @@ void EGPleiadi::updateColorSky()
   else
   {
     ofColor c = colorSky;
-    c.a = smoothedVol * 20 * 255 * backgroundMultiplier;
+    c.a = smoothedVol * 40 * 255 * backgroundMultiplier;
+    c.a = ofClamp(c.a, backgroundMinimunOpacity, 255);
     colorSky.set(c);
     ofSetColor(colorSky);
     colorSkyImage.draw(0,0, size.x, size.y);
     c = colorSky2;
-    c.a = smoothedVol * 40 * 255 * backgroundMultiplier;
+    c.a = smoothedVol * 20 * 255 * backgroundMultiplier;
+    c.a = ofClamp(c.a, backgroundMinimunOpacity, 255);
     colorSky2.set(c);
     ofSetColor(colorSky2);
     colorSkyImage2.draw(0,0,size.x, size.y);
+    ofPushStyle();
+    ofSetColor(255, fakeStarsOpacity);
+    fakeStars1.draw(0,0,size.x, size.y);
+    ofPopStyle();
     // Sembra che iltrail prenda anche il noise
     if(drawTrailFbo)
     {
@@ -446,6 +472,7 @@ ofParameterGroup* EGPleiadi::getStars2ParameterGroup()
     stars2Params->add(drawStars2.set("Draw star", true));
     stars2Params->add(blur2.set("Blur", 0, 0, 5));
     ofParameterGroup* billboard2 = billboardLayer2.getBillboardParams();
+    stars2Params->add(fakeStarsOpacity.set("Fake stars opacity", 255,0,255));
     billboard2->setName("Billboard 2");
     stars2Params->add(*billboardLayer2.getBillboardParams());
     billboard2 = NULL;
@@ -480,7 +507,8 @@ ofParameterGroup* EGPleiadi::getColorSkyParameterGroup()
 //    colorSkyParams->add(drawSky.set("Draw Sky", true));
     //    colorSkyParams->add(useDynamicColorSky.set("Use dynamic", false));
     colorSkyParams->add(backgroundFadeOutSpeed.set("Background Fade out speed",1, 0, 1));
-    colorSkyParams->add(backgroundMultiplier.set("Background Sky Multipluer",1, 0, 10));
+    colorSkyParams->add(backgroundMultiplier.set("Background Sky Multiplier",1, 0, 10));
+    colorSkyParams->add(backgroundMinimunOpacity.set("Background Minimun Opacity",10, 0, 255));
     colorSkyParams->add(colorSky.set("Color sky", ofColor(255,255), ofColor(0,0), ofColor(255,255)));
     colorSkyParams->add(colorSky2.set("Color sky 2", ofColor(255,255), ofColor(0,0), ofColor(255,255)));
   }
