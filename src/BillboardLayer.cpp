@@ -68,12 +68,12 @@ void BillboardLayer::update(vector<float> left, vector<float> right)
     if(i < totBillboards*.5)
     {
       int index = ofMap(i, 0, totBillboards*.5, 0, left.size()-1);
-      billboardSizeTarget[i] = billboardsScale * 10 * abs(left[index]);
+      billboardSizeTarget[i] = ofClamp(billboardsScale * abs(left[index]),0, maxScaleValue);
     }
     else
     {
       int index = ofMap(i, totBillboards*.5, totBillboards-1, 0, right.size()-1);
-      billboardSizeTarget[i] = billboardsScale * 10 * abs(right[index]);
+      billboardSizeTarget[i] = ofClamp(billboardsScale * abs(right[index]), 0, maxScaleValue);
     }
     billboards.setNormal(i,ofVec3f(billboardSizeTarget[i],0,0));
   }
@@ -116,7 +116,9 @@ ofParameterGroup* BillboardLayer::getBillboardParams()
     billboardParams->add(useShader.set("Use shader", true));
     billboardParams->add(useAddBlendMode.set("Use blend mode", true));
     billboardParams->add(posZ.set("Pos z", 0, -1000, 1000));
-    billboardParams->add(billboardsScale.set("billboards Scale", 1, 0, 1000));
+    billboardParams->add(billboardsScale.set("billboards Scale", 1, 0, 10000));
+    billboardParams->add(maxScaleValue.set("Max Scale Value", 1, 0, 1000));
+    
   }
   return billboardParams;
 }
