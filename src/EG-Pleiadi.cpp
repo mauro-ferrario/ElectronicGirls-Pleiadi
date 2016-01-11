@@ -73,8 +73,8 @@ void EGPleiadi::setupStars()
     ofDrawCircle(stars2[a].x, stars2[a].y, stars2[a].z);
   starFbo2.end();
   
-  goofyBlurStar1.setup(size.x, size.y, "shaders/");
-  goofyBlurStar2.setup(size.x, size.y, "shaders/");
+//  goofyBlurStar1.setup(size.x, size.y, "shaders/");
+//  goofyBlurStar2.setup(size.x, size.y, "shaders/");
   
   billboardLayer1.setup(TOT_STARS_1, "images/spark.png", ofVec3f(size), stars1);
   billboardLayer2.setup(TOT_STARS_2, "images/spark.png", ofVec3f(size), stars2);
@@ -320,8 +320,8 @@ void EGPleiadi::updateStars1()
   endRotationScaleMatrix();
   starFbo1.end();
   
-  if(!drawTrailFbo)
-    goofyBlurStar1.update(starFbo1, ofVec2f(blur1));
+//  if(!drawTrailFbo)
+//    goofyBlurStar1.update(starFbo1, ofVec2f(blur1));
 }
 
 void EGPleiadi::updateStars2()
@@ -341,7 +341,7 @@ void EGPleiadi::updateStars2()
   }
   endRotationScaleMatrix();
   starFbo2.end();
-  goofyBlurStar2.update(starFbo2, ofVec2f(blur2));
+//  goofyBlurStar2.update(starFbo2, ofVec2f(blur2));
 }
 
 void EGPleiadi::startRotationScaleMatrix()
@@ -423,9 +423,11 @@ void EGPleiadi::draw()
     endRotationScaleMatrix();
   }
   if(drawStars1&&!drawTrailFbo)
-    goofyBlurStar1.draw();
+    trailFBO.draw(0,0,size.x, size.y);
+//    goofyBlurStar1.draw();
   if(drawStars2)
-    goofyBlurStar2.draw();
+    billboardLayer2.draw();
+//    goofyBlurStar2.draw();
   if(debugVisible)
     drawDebug();
 }
@@ -450,7 +452,7 @@ ofParameterGroup* EGPleiadi::getStars1ParameterGroup()
     stars1Params->setName("Stars 1");
     stars1Params->add(useBillboard1.set("Use billboard", false));
     stars1Params->add(drawStars1.set("Draw star", true));
-    stars1Params->add(blur1.set("Blur", 0, 0, 5));
+//    stars1Params->add(blur1.set("Blur", 0, 0, 5));
     ofParameterGroup* billboard1 = billboardLayer1.getBillboardParams();
     billboard1->setName("Billboard 1");
     stars1Params->add(*billboardLayer1.getBillboardParams());
@@ -470,7 +472,7 @@ ofParameterGroup* EGPleiadi::getStars2ParameterGroup()
     stars2Params->setName("Stars 2");
     stars2Params->add(useBillboard2.set("Use billboard", false));
     stars2Params->add(drawStars2.set("Draw star", true));
-    stars2Params->add(blur2.set("Blur", 0, 0, 5));
+//    stars2Params->add(blur2.set("Blur", 0, 0, 5));
     ofParameterGroup* billboard2 = billboardLayer2.getBillboardParams();
     stars2Params->add(fakeStarsOpacity.set("Fake stars opacity", 255,0,255));
     billboard2->setName("Billboard 2");

@@ -12,7 +12,7 @@
 #include "ofMain.h"
 #include "ofxGUI.h"
 #include "GoofyPerlinNoise.h"
-#include "GoofyBlurGLSL.h"
+//#include "GoofyBlurGLSL.h"
 #include "BillboardLayer.h"
 #include "Constellations.h"
 #include "GoofyOSCController.h"
@@ -53,18 +53,18 @@ private:
   BillboardLayer        billboardLayer1;
   Constellations        billboardLayer2;
   
-  GoofyBlurGLSL         goofyBlurStar1;
-  GoofyBlurGLSL         goofyBlurStar2;
+//  GoofyBlurGLSL         goofyBlurStar1;
+//  GoofyBlurGLSL         goofyBlurStar2;
   
   ofParameterGroup*     getStars1ParameterGroup();
   ofParameterGroup*     stars1Params;
-  ofParameter<float>    blur1;
+//  ofParameter<float>    blur1;
   ofParameter<bool>     drawStars1;
   ofParameter<bool>     useBillboard1;
   
   ofParameterGroup*     getStars2ParameterGroup();
   ofParameterGroup*     stars2Params;
-  ofParameter<float>    blur2;
+//  ofParameter<float>    blur2;
   ofParameter<bool>     drawStars2;
   ofParameter<bool>     useBillboard2;
   ofParameter<float>    fakeStarsOpacity;
