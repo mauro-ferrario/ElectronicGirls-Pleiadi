@@ -29,10 +29,24 @@ public:
   static void addMapValue(float& value, float multiplier = 1)
   {
     int posToFill = GoofyOSCController::getInstance().posToFill++;
-    addMapValue(GoofyOSCController::getInstance().korgNanoController2[posToFill], GoofyOSCController::getInstance().korgNanoController2[posToFill], value, multiplier);
+    string korgNanoController2String = GoofyOSCController::getInstance().korgNanoController2[posToFill];
+    addMapValue(korgNanoController2String, GoofyOSCController::getInstance().korgNanoController2[posToFill], value, multiplier);
+  }
+  
+  static void addMapValue(ofParameter<float>& value, float multiplier = 1)
+  {
+    int posToFill = GoofyOSCController::getInstance().posToFill++;
+    string korgNanoController2String = GoofyOSCController::getInstance().korgNanoController2[posToFill];
+    addMapValue(korgNanoController2String, GoofyOSCController::getInstance().korgNanoController2[posToFill], value, multiplier);
   }
   
   static void addMapValue(string varName, float& value, float multiplier = 1)
+  {
+    int posToFill = GoofyOSCController::getInstance().posToFill++;
+    addMapValue(posToFill, varName, value, multiplier);
+  }
+  
+  static void addMapValue(string varName, ofParameter<float>& value, float multiplier = 1)
   {
     int posToFill = GoofyOSCController::getInstance().posToFill++;
     addMapValue(posToFill, varName, value, multiplier);
@@ -43,6 +57,20 @@ public:
     string address = GoofyOSCController::getInstance().korgNanoController2[posToFill];
     addMapValue(varName, address, value, multiplier);
   }
+  
+  static void addMapValue(int posToFill, string varName, ofParameter<float>& value, float multiplier = 1)
+  {
+    string address = GoofyOSCController::getInstance().korgNanoController2[posToFill];
+    addMapValue(varName, address, value, multiplier);
+  }
+  
+  static void addMapValue(string varName, string mapString, ofParameter<float>& value, float multiplier = 1)
+  {
+    GoofyOSCController::getInstance().mapToOfParameterFloatValue[mapString] = &value;
+    GoofyOSCController::getInstance().multipliers[mapString] = multiplier;
+    GoofyOSCController::getInstance().varNames[mapString] = varName;
+  }
+
   
   static void addMapValue(string varName, string mapString, float& value, float multiplier = 1)
   {
@@ -67,6 +95,7 @@ private:
   ofxOscReceiver                      receiver;
   void                                setupOSC();
   unordered_map<string, float* > mapToFloatValue;
+  unordered_map<string, ofParameter<float>* > mapToOfParameterFloatValue;
   unordered_map<string, float >  multipliers;
   unordered_map<string, string > varNames;
   string                              lastString;
