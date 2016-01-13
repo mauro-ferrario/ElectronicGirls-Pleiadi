@@ -43,15 +43,17 @@ void EGPleiadi::setup()
   smoothedVol     = 0.0;
   scaledVol		= 0.0;
   
-  GoofyOSCController::addMapValue("Rotation speed", rotationSpeedOSC, 1);
-  GoofyOSCController::addMapValue("Trail FBO opacity", trailFboOpacityOSC, 255);
-  GoofyOSCController::addMapValue("Trail opacity", trailOSC, 255);
-  GoofyOSCController::addMapValue("background Multipier", backgroundMultiplierOSC, 10);
-  GoofyOSCController::addMapValue("Background Minimun Opacity", backgroundMinimunOpacityOSC, 255);
-  GoofyOSCController::addMapValue("Fake stars opacity", fakeStarsOpacityOSC, 255);
-  GoofyOSCController::addMapValue("Noise Speed", noiseSpeedOSC, .1);
-  GoofyOSCController::addMapValue("Max stars scale", billboardsScaleOSC, 10000);
+  GoofyOSCController::addMapValue("Rotation speed", rotationSpeed, 1);
+  GoofyOSCController::addMapValue("Trail FBO opacity", trailFboOpacity, 255);
+  GoofyOSCController::addMapValue("Trail opacity", trail, 255);
+  GoofyOSCController::addMapValue("background Multipier", backgroundMultiplier, 10);
+  GoofyOSCController::addMapValue("Background Minimun Opacity", backgroundMinimunOpacity, 255);
+  GoofyOSCController::addMapValue("Fake stars opacity", fakeStarsOpacity, 255);
+  GoofyOSCController::addMapValue("Noise Speed", noise.speed, .1);
+  GoofyOSCController::addMapValue("Max stars scale", billboardLayer1.billboardsScale, 10000);
   GoofyOSCController::getInstance().toggleDraw();
+  
+  syphonOut.setName("EG-Pleiadi");
 }
 
 void EGPleiadi::setupStars()
@@ -207,14 +209,6 @@ void EGPleiadi::setupSingleFbo(ofFbo& fbo)
 
 void EGPleiadi::update()
 {
-  rotationSpeed                   = rotationSpeedOSC;
-  trailFboOpacity                 = trailFboOpacityOSC;
-  trail                           = trailOSC;
-  backgroundMultiplier            = backgroundMultiplierOSC;
-  fakeStarsOpacity                = fakeStarsOpacityOSC;
-  backgroundMinimunOpacity        = backgroundMinimunOpacityOSC;
-  noise.speed                     = noiseSpeedOSC;
-  billboardLayer1.billboardsScale = billboardsScaleOSC;
   //lets scale the vol up to a 0-1 range
   scaledVol = ofMap(smoothedVol, 0.0, 0.17, 0.0, 1.0, true);
   
@@ -428,6 +422,9 @@ void EGPleiadi::draw()
   if(drawStars2)
     billboardLayer2.draw();
 //    goofyBlurStar2.draw();
+//  ofPushStyle();
+//  syphonOut.publishScreen();
+//  ofPopStyle();
   if(debugVisible)
     drawDebug();
 }

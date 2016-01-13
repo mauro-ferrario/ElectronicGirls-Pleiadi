@@ -16,6 +16,7 @@
 #include "BillboardLayer.h"
 #include "Constellations.h"
 #include "GoofyOSCController.h"
+#include "ofxSyphon.h"
 
 
 #define TOT_STARS_1 1000
@@ -68,7 +69,6 @@ private:
   ofParameter<bool>     drawStars2;
   ofParameter<bool>     useBillboard2;
   ofParameter<float>    fakeStarsOpacity;
-  float                 fakeStarsOpacityOSC;
   
   vector<ofVec3f>       stars1;
   vector<ofVec3f>       stars2;
@@ -86,9 +86,7 @@ private:
   ofParameter<ofColor>  colorSky;
   ofParameter<ofColor>  colorSky2;
   ofParameter<float>    backgroundMultiplier;
-  float                 backgroundMultiplierOSC;
   ofParameter<float>    backgroundMinimunOpacity;
-  float                 backgroundMinimunOpacityOSC;
   ofParameter<float>    backgroundFadeOutSpeed;
   ofParameter<bool>     drawSky;
   ofImage               colorSkyImage;
@@ -101,17 +99,12 @@ private:
   
   ofParameter<bool>     rotationAndScaleEnabled;
   ofParameter<float>    rotationSpeed;
-  float                 rotationSpeedOSC;
   ofParameter<float>    trail;
-  float                 trailOSC;
   ofParameter<bool>     trailActive;
   ofParameter<float>    scale;
   ofParameter<float>    trailFboOpacity;
-  float                 trailFboOpacityOSC;
   ofParameter<bool>     drawTrailFbo;
   float                 trailValue;
-  float                 noiseSpeedOSC;
-  float                 billboardsScaleOSC;
   
   ofImage               overlay;
   float                 angle;
@@ -126,8 +119,8 @@ private:
   float                 smoothedVol;
   float                 scaledVol;
   
-  
   ofFbo                 trailFBO;
+  ofxSyphonServer       syphonOut;
 };
 
 #endif /* defined(__ElectronicGirls_Pleiadi__EG_Pleiadi__) */
