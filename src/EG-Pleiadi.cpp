@@ -267,6 +267,7 @@ void EGPleiadi::audioIn(float * input, int bufferSize, int nChannels)
 
 void EGPleiadi::updateStars1()
 {
+  ofDrawBitmapStringHighlight("1", 30, 30);
   if(trailFboOpacity == 0)
     drawTrailFbo = false;
   else
@@ -423,7 +424,7 @@ void EGPleiadi::draw()
     billboardLayer2.draw();
 //    goofyBlurStar2.draw();
 //  ofPushStyle();
-//  syphonOut.publishScreen();
+  syphonOut.publishScreen();
 //  ofPopStyle();
   if(debugVisible)
     drawDebug();
